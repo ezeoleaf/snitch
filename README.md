@@ -1,6 +1,6 @@
 # Snitch
 
-Snitch is a slack Bot that fetches and publish PRs with pendings reviews
+Snitch is a Slack bot that fetches and publish PRs with pendings reviews
 
 Done:
 - Fetch my pending open PRs
