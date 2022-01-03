@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -35,73 +34,11 @@ func (s Server) Open() error {
 	router := mux.NewRouter()
 
 	// Route handles & endpoints
-	router.HandleFunc("/my-prs", s.GetMyPendingPRs).Methods("POST")
-	router.HandleFunc("/prs", s.GetPRsByRepository).Methods("POST")
+	router.HandleFunc("/repo-prs", s.GetPRsByRepository).Methods("POST")
 	router.HandleFunc("/user-prs", s.GetPRsByUsername).Methods("POST")
-	router.HandleFunc("/owned-prs", s.GetOwnedPRs).Methods("POST")
 
 	// serve the app
 	return http.ListenAndServe(s.address, router)
-}
-
-// GetMyPendingPRs post a message with all the PRs I still have to review
-func (s Server) GetMyPendingPRs(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
-	channelID := r.FormValue("channel_id")
-	username := strings.ReplaceAll(r.FormValue("user_name"), ".", "-")
-	channelName := r.FormValue("channel_name")
-
-	if channelName == DM { // This should be done so we can publish both IM and public messages
-		channelID = r.FormValue("user_id")
-	}
-
-	// Workaround for not being able to use Schibsted Slack space to get the username
-	if username == "ezequiel-olea-figuero" || username == "ezeoleaf" {
-		username = "ezequiel-olea-figueroa"
-	}
-
-	prs, err := s.service.GithubClient.GetPRsByUser(ctx, username)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	err = s.service.SlackClient.SendMessage(ctx, channelID, prs, nil, nil)
-
-	if err != nil {
-		json.NewEncoder(w).Encode("Slack message not posted")
-	}
-}
-
-// GetOwnedPRs post a message with all the PRs created by me and that still missing reviews
-func (s Server) GetOwnedPRs(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
-	channelID := r.FormValue("channel_id")
-	username := strings.ReplaceAll(r.FormValue("user_name"), ".", "-")
-	channelName := r.FormValue("channel_name")
-
-	if channelName == DM { // This should be done so we can publish both IM and public messages
-		channelID = r.FormValue("user_id")
-	}
-
-	// Workaround for not being able to use Schibsted Slack space to get the username
-	if username == "ezequiel-olea-figuero" || username == "ezeoleaf" {
-		username = "ezequiel-olea-figueroa"
-	}
-
-	prs, err := s.service.GithubClient.GetPRsOwned(ctx, username)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	err = s.service.SlackClient.SendMessage(ctx, channelID, prs, nil, nil)
-
-	if err != nil {
-		json.NewEncoder(w).Encode("Slack message not posted")
-	}
 }
 
 // GetPRsByUsername post a message with all the PRs in which the username is missing reviews

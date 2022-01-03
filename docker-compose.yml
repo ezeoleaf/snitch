@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  snitch:
+    build: .
+    environment:
+      - ENTERPRISE_GITHUB=${ENTERPRISE_GITHUB}
+      - GITHUB_ADDRES=${GITHUB_ADDRES}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - HTTP_ADDRESS=${HTTP_ADDRESS}
+      - SLACK_API_TOKEN=${SLACK_API_TOKEN}
+    entrypoint: sh -c "/snitch"
+    ports:
+      - 8042:8042
+  # ----
+    
