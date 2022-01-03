@@ -10,7 +10,7 @@ import (
 )
 
 // NewGithubClient returns a new Github Client
-func NewGithubClient(token string) *GithubClient {
+func NewGithubClient(token string, address string, isEnterprise bool) *GithubClient {
 	ctx := context.Background()
 
 	ts := oauth2.StaticTokenSource(
@@ -18,7 +18,20 @@ func NewGithubClient(token string) *GithubClient {
 	)
 	tc := oauth2.NewClient(ctx, ts)
 
-	uClient, err := github.NewEnterpriseClient("https://github.schibsted.io/api/v3", "https://github.schibsted.io/api/uploads", tc)
+	var (
+		uClient *github.Client
+		err     error
+	)
+
+	if isEnterprise {
+		uClient, err = github.NewEnterpriseClient(
+			fmt.Sprintf("%s/api/v3", address),
+			fmt.Sprintf("%s/api/uploads", address),
+			tc,
+		)
+	} else {
+		uClient = github.NewClient(tc)
+	}
 
 	if err != nil {
 		panic(err)

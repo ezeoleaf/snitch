@@ -41,7 +41,7 @@ func (s Server) Open() error {
 	router.HandleFunc("/owned-prs", s.GetOwnedPRs).Methods("POST")
 
 	// serve the app
-	return http.ListenAndServe(":8042", router)
+	return http.ListenAndServe(s.address, router)
 }
 
 // GetMyPendingPRs post a message with all the PRs I still have to review
