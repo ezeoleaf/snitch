@@ -15,9 +15,9 @@ import (
 var (
 	isEnterpriseGithubString = envString("ENTERPRISE_GITHUB", "false")
 	githubAddress            = envString("GITHUB_ADDRES", "https://github.com/")
-	githubToken              = envString("GITHUB_TOKEN", "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")
+	githubToken              = envString("GITHUB_TOKEN", "")
 	httpAddress              = envString("HTTP_ADDRESS", ":8042")
-	slackAPI                 = envString("SLACK_API_TOKEN", "xoxb-2646296415622-2676762513744-TwY7b8bl9GP0aZTz5hEzEMdv")
+	slackAPI                 = envString("SLACK_API_TOKEN", "")
 )
 
 const DM = "directmessage"
