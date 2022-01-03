@@ -87,31 +87,6 @@ func (c *GithubClient) GetPRsByUser(ctx context.Context, username string) ([]PR,
 	return prs, nil
 }
 
-// GetPRsOwned returns all of the PRs created by username and that are missing reviews
-func (c *GithubClient) GetPRsOwned(ctx context.Context, username string) ([]PR, error) {
-	qs := fmt.Sprintf("author:%s state:open", username)
-
-	issues, _, err := c.SearchClient.Issues(ctx, qs, nil)
-
-	if err != nil {
-		return nil, err
-	}
-
-	prs := []PR{}
-
-	for _, i := range issues.Issues {
-		pr, err := c.enrichPR(ctx, i)
-
-		if err != nil {
-			continue
-		}
-
-		prs = append(prs, pr)
-	}
-
-	return prs, nil
-}
-
 func (c *GithubClient) enrichPR(ctx context.Context, issue *github.Issue) (PR, error) {
 	repo := strings.Split(issue.GetRepositoryURL(), "/")
 
