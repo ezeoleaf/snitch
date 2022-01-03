@@ -32,12 +32,18 @@ After creating the Slack application, you need to create two slash commands:
 
 ![image](https://user-images.githubusercontent.com/10358977/147968887-6cc0530c-8c32-4792-bf4f-252a5defa9e5.png)
 
+### Running locally
+
+For running the bot locally I recommend using [ngrok](https://ngrok.com/) to redirect the HTTP calls from Slack to your local environment.
+
+#### Note: This is only recommended for testing purposes
+
 ## How does it look like?
 
 When using:
 
 - `/repo-prs ezeoleaf/snitch`
-![image](https://user-images.githubusercontent.com/10358977/147970481-ddbc62ca-1141-4c46-b4be-fdcd76ea778d.png)
+![image](https://user-images.githubusercontent.com/10358977/147971004-f549fce7-0e1c-499b-abeb-01a7c3abfb54.png)
 
 - `/user-prs ezeoleaf`
 ![image](https://user-images.githubusercontent.com/10358977/147970549-e39363c2-baaf-443e-bd73-98a9edee1f7d.png)
