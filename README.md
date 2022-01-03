@@ -1,7 +1,9 @@
 # Snitch
+[![Go](https://github.com/ezeoleaf/snitch/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/ezeoleaf/snitch/actions/workflows/go.yml)
+
 <img src="https://github.com/ezeoleaf/snitch/blob/main/img/transparent-snitch.png" width="150">
 
-Snitch is a Slack bot that fetches and publish PRs with pendings reviews. It could publish the messages in channels or via DM
+Snitch is a Slack bot that fetches and publish PRs with pendings reviews in channels or via DM
 
 ## Disclaimer
 
