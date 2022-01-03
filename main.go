@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"snitch/provider"
+	"snitch/publisher"
 	"strconv"
 	"syscall"
 )
@@ -18,10 +20,12 @@ var (
 	slackAPI                 = envString("SLACK_API_TOKEN", "")
 )
 
+const DM = "directmessage"
+
 type Service struct {
 	Logger       log.Logger
-	GithubClient *GithubClient
-	SlackClient  *SlackClient
+	GithubClient *provider.GithubClient
+	SlackClient  *publisher.SlackClient
 }
 
 func main() {
@@ -34,8 +38,8 @@ func main() {
 	}
 
 	service := Service{
-		GithubClient: NewGithubClient(githubToken, githubAddress, isEnterpriseGithub),
-		SlackClient:  NewSlackClient(slackAPI),
+		GithubClient: provider.NewGithubClient(githubToken, githubAddress, isEnterpriseGithub),
+		SlackClient:  publisher.NewSlackClient(slackAPI),
 	}
 
 	errorChannel := make(chan error)

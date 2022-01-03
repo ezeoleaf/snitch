@@ -1,25 +1,35 @@
-package main
+package publisher
 
 import (
 	"context"
 	"fmt"
+	"snitch/provider"
 	"time"
 
 	"github.com/slack-go/slack"
 )
+
+// SlackClient is ..
+type SlackClient struct {
+	Client *slack.Client
+}
+
+type SlackService interface {
+	SendMessage(ctx context.Context, channelID string, prs []provider.PR) error
+}
 
 // NewSlackClient returns a new Slack Client
 func NewSlackClient(token string) *SlackClient {
 	api := slack.New(token)
 
 	c := &SlackClient{
-		client: api,
+		Client: api,
 	}
 
 	return c
 }
 
-func (s *SlackClient) getMessageTitle(prs []PR, repoName, username *string) string {
+func (s *SlackClient) getMessageTitle(prs []provider.PR, repoName, username *string) string {
 	title := "PRs with pending reviews"
 
 	if len(prs) == 0 {
@@ -37,7 +47,7 @@ func (s *SlackClient) getMessageTitle(prs []PR, repoName, username *string) stri
 }
 
 // SendMessage will post a message with all of the PRs in the specified channelID
-func (s *SlackClient) SendMessage(ctx context.Context, channelID string, prs []PR, repositoryName, username *string) error {
+func (s *SlackClient) SendMessage(ctx context.Context, channelID string, prs []provider.PR, repositoryName, username *string) error {
 	title := s.getMessageTitle(prs, repositoryName, username)
 
 	divideBlock := slack.DividerBlock{
@@ -78,7 +88,7 @@ func (s *SlackClient) SendMessage(ctx context.Context, channelID string, prs []P
 		blocks = append(blocks, block, divideBlock)
 	}
 
-	_, _, err := s.client.PostMessage(
+	_, _, err := s.Client.PostMessage(
 		channelID,
 		slack.MsgOptionBlocks(blocks...),
 	)
